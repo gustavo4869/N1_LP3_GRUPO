@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>   
+    <head>
+       <script src="js/jquery-3.3.1.min.js"></script>
+       <script src="js/bootstrap.js"></script>
+       <script src="js/bootstrap.bundle.js"></script>
+       <script src="js/moment.min.js"></script>
+       <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+        <title>Climate</title>
+    </head>
+    <script>
+            $(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();             
+                
+                $("#pesquisar-clima").click(function() {
+                    var displayResources = $("#display-resources");     
+                    var nomeCidade = $("#vlPesquisaCidade").val(); 
+                    var key = "0ce35935b5fd4dd5a0305947191503";
+                    var url = "http://api.apixu.com/v1/current.json?lang=pt&key="+key+"&q="+encodeURIComponent(nomeCidade);
+                    
+                    displayResources.text("Searching...");
+                    $.ajax({
+                    type: "GET",
+                    url: url, 
+                    contentType: "application/json",
+                    dataType: 'json',
+                    success: function(result) {
+                        console.log(result);
+                       // if(result.num_results > 0)
+                        //{
+                        var cidade = result.location.name.toString();
+                        var regiao = result.location.region.toString();
+                        var horaAtual = moment(result.location.localtime.toString()).format("DD/MM/YYYY HH:mm:ss");
+                        var tempAtual = result.current.temp_c.toString();
+                        var sensacaoTermica = result.current.feelslike_c.toString();
+                        var condicaoClimatica = result.current.condition.text.toString();
+                        var condicaoClimaticaIcone = result.current.condition.icon.toString();
+                        
+                        var output ="";
+
+                         //   for (var i in result.results) {
+                            output +=
+
+                            "<div class='col-sm-4' style='margin-top: 2%;'>" +
+                                "<div class='card' style='width: 18rem;'>" +
+                                    "<div class='card-header'>" +
+                                        "<h5 class='card-title'>" + cidade + "</h5>"+
+                                            "<p class='card-subtitle mb-2 text-muted'><i>" + regiao + "</i></p>" +
+                                    "</div>" +
+                                    "<div class='card-body'>" +
+                                        "<ul class='list-group list-group-flush'>" +
+                                            "<li class='list-group-item'>" +
+                                                "<p class='card-text'>" + tempAtual + "</p>" +
+                                                "<img id='icone' src='http:"+condicaoClimaticaIcone+"'>" +
+                                            "</li>" +
+                                        "</ul>" +
+                                    "</div>" +
+                                "<div class='card-body'>" +
+                                        "<ul class='list-group list-group-flush'>" +
+                                            "<li class='list-group-item'>" +
+                                                "<p class='card-text'>" + condicaoClimatica + "</p>" +
+                                            "</li>" +
+                                        "</ul>" +
+                                    "</div>" +
+                                    "<div class='card-footer'>" +
+                                        horaAtual
+                                    "</div>" +
+                                "</div>" +
+                            "</div>";          
+                        //    }        
+                            displayResources.html(output);
+                       // }
+                       // else
+                        //{
+                          //  var output =
+                        //    "<span><h4>Sorry!</h4><br/>We didn't find a review for <b>"+ nomeFilme +"</b> =(</span>";
+                          //  displayResources.html(output);
+                        //}
+
+
+                        
+                    }
+                    });
+                });                
+            });
+        </script>
+    <body style="background-color: white;">
+       <div class="app">
+            <img src="img/instagram_profile_image.png" style="margin-left: 2%;width: 150px;height: 150px;">
+         <div id="form" style="background-color: #f4f7f9;width: 100%;height: 20%; border-radius: 15px;">
+            <div> 
+                <br/>
+                <center>
+                    <h5>Pesquise pela previsão do tempo</h5>
+                </center>   
+            </div>              
+         <!--   <div class="input-group" style="width:80%;margin-bottom: 20px;">
+                <input type="text" class="form-control" id="vlPesquisa" placeholder="Movie name" style="margin-left: 20%;" data-toggle="tooltip" data-placement="bottom" title="Please type the name of the movie in English. Ex.: Twilight, The Avengers, etc...">
+                <span class="input-group-btn">
+                    <button id="pesquisar-filmes" type="submit" class="btn btn-primary" style="margin-left: 15%;"><i class="fas fa-search"></i></button>
+                </span>
+            </div>-->
+             
+               <div class="input-group" style="width:80%;margin-bottom: 20px;">
+                <input type="text" class="form-control" id="vlPesquisaCidade" placeholder="Cidade" style="margin-left: 20%;" data-toggle="tooltip" data-placement="bottom" title="Digite a cidade">
+                <span class="input-group-btn">
+                    <button id="pesquisar-clima" type="submit" class="btn btn-primary" style="margin-left: 15%;"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+           </div>
+           <div id="display-resources" style="margin-top: 2%;margin-left: 2%;"  class="row">
+                                         
+           </div>
+        </div>
+    </body>
+    <footer>
+        <div style="color: #21252996">
+            <span>
+                <center>
+                    Developed by Maria de Fátima Rocha Silveira - 081160042
+                    <br/>
+                    Faculdade de Tecnologia Termomecanica
+                </center>
+            </span>
+        </div>
+    </footer>
+</html>
